@@ -122,6 +122,8 @@ int main(int argc, char *argv[]) {
 	char worker_identity[32];
 	char recv_buff[RECV_BUF_LEN];
 
+	creat("./event_action.lock",S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+
 	///Check for command line arguments
 	if (argc != 4) {
 		fprintf(stderr,
@@ -254,13 +256,16 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	}
-	system("mpc play");
+
+	system("mpc toggle");
 	json_object_put(jmessage);
 
 	snd_pcm_drain(capture_handle);
 	snd_pcm_close(capture_handle);
 	zmq_close(stream_frontend);
 	zmq_ctx_destroy(context);
+
+	remove("./event_action.lock");
 
 	return 0;
 }
