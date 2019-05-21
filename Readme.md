@@ -28,8 +28,19 @@ json-c
 
 Installing depedencies
 ----------------------
-	sudo apt-get install libasound2-dev libjson-c-dev libzmq3-dev 
+	sudo apt-get install libasound2-dev libjson-c-dev libzmq3-dev mpd mpc vim
 
 How to use
 ----------
+## Setting mpd.conf
+sudo vim /etc/mpd.conf
+change set audio input :
+	audio_output {
+        	type            "alsa"
+        	name            "My ALSA Device"
+        	device          "hw:0,0"        # optional
+        	mixer_type      "software"      # optional	
+	}
+	
+## Running Program
 	run.sh

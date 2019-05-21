@@ -1,6 +1,4 @@
 #!/bin/bash
- for i in {1902..1905}
- 	do 
-	Debug/client-ss-service localhost:$i default default &
-        sleep 0.1
-	done
+$ip_address=127.0.0.1
+$host=1903
+./client-ss-service ${ip_address}:${host} default default
