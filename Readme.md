@@ -34,7 +34,7 @@ How to use
 ----------
 ## Setting mpd.conf
 sudo vim /etc/mpd.conf
-change set audio input
+change set audio output :
 
 	audio_output {
         	type            "alsa"
