@@ -46,4 +46,5 @@ change set audio input
 reboot now your computer !!!
 	
 ## Running Program
+	make 
 	run.sh
