@@ -42,6 +42,8 @@ change set audio input
         	device          "hw:0,0"        # optional
         	mixer_type      "software"      # optional	
 	}
+
+reboot now your computer !!!
 	
 ## Running Program
 	run.sh
