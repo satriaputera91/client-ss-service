@@ -32,4 +32,4 @@ Installing depedencies
 
 How to use
 ----------
-	show run.sh
+	run.sh
