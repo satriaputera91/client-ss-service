@@ -19,7 +19,7 @@
 #define REQ_CONNECT	1
 #define REP_ACCEPT	1
 
-#define RECV_BUF_LEN 4096
+#define RECV_BUF_LEN 8092
 #define randof(num)  (int) ((float) (num) * random () / (RAND_MAX + 1.0))
 
 int setparams(snd_pcm_t *handle, char *name) {
@@ -187,29 +187,30 @@ int main(int argc, char *argv[]) {
 	struct json_object *jlist;
 	struct json_object *jdata;
 	struct json_object *jpath;
-	char res_path[2048];
-
+	char res_path[4096];
+	int stop_audio = 0;
 	//Streaming To Engine
 	printf("Streaming Ready...\n");
 	while (1) {
 
 		//printf("record...\n");
-		snd_pcm_prepare(capture_handle);
-		memset(buf, 0, BUF_SIZE * 2);
-		if ((nread = snd_pcm_readi(capture_handle, buf, BUF_SIZE)) != BUF_SIZE) {
-			if (nread < 0) {
-				fprintf(stderr, "read from audio interface failed (%s)\n",
-						snd_strerror(nread));
-			} else {
-				fprintf(stderr,
-						"read from audio interface failed after %d frames\n",
-						nread);
-			}
+		if(stop_audio == 0) {
 			snd_pcm_prepare(capture_handle);
-			continue;
+			memset(buf, 0, BUF_SIZE * 2);
+			if ((nread = snd_pcm_readi(capture_handle, buf, BUF_SIZE)) != BUF_SIZE) {
+				if (nread < 0) {
+					fprintf(stderr, "read from audio interface failed (%s)\n",
+							snd_strerror(nread));
+				} else {
+					fprintf(stderr,
+							"read from audio interface failed after %d frames\n",
+							nread);
+				}
+				snd_pcm_prepare(capture_handle);
+				continue;
+			}
+			zmq_send(stream_frontend, buf, BUF_SIZE * 2, 0);
 		}
-
-		zmq_send(stream_frontend, buf, BUF_SIZE * 2, 0);
 
 		zmq_pollitem_t items[] = { { stream_frontend, 0, ZMQ_POLLIN, 0 } };
 
@@ -223,6 +224,9 @@ int main(int argc, char *argv[]) {
 			memset(recv_buff, 0, RECV_BUF_LEN);
 			rc = zmq_recv(stream_frontend, recv_buff, RECV_BUF_LEN, 0);
 			recv_buff[rc] = '\0';
+			if(strncmp(recv_buff,"FINAL",5) == 0){
+				stop_audio = 1;		
+			}
 
 			jmessage = json_tokener_parse(recv_buff);
 
@@ -230,7 +234,6 @@ int main(int argc, char *argv[]) {
 
 			if (jmessage != NULL) {
 				break;
-
 			}
 
 		}
