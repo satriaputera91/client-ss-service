@@ -1,5 +1,5 @@
-Notula speech API client library
-================================
+Smart Speaker Client 
+====================
 
 To build the library: see `./INSTALL`.  These instructions are valid for UNIX
 systems including various flavors of Linux; Darwin; and Cygwin (has not been
@@ -23,12 +23,12 @@ Platform specific notes
 -----------------------
 ### PowerPC 64bits little-endian (ppc64le)
 
-Notula speech API client library  is expected to work out of the box in Ubuntu >= 16.04 with
+Smart Speaker Client Program is expected to work out of the box in Ubuntu >= 16.04 with
 json-c
 
 Installing depedencies
 ----------------------
-	sudo apt-get install libasound2-dev libjson-c-dev libzmq3-dev mpd mpc vim
+	sudo apt-get install libasound2 libasound2-dev libjson0 libjson0-dev libzmq5 libzmq3-dev mpd mpc vim
 
 How to use
 ----------
